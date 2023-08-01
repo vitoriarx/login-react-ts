@@ -9,8 +9,8 @@ function AuthProvider({ children }: PropsWithChildren) {
 
   function login(email: string, password: string) {
     try {
-      const account = service.login(email, password);
-      console.log(account);
+      const data = service.login(email, password);
+      setAccount(data);
     } catch (error) {
       alert((error as Error).message);
     }

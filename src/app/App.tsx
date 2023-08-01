@@ -1,26 +1,28 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./styles.css";
 import { AuthService } from "../services/auth";
+import { AuthCTX } from "../contexts/auth";
 
 function App() {
   const service = new AuthService();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  const { account, login } = useContext(AuthCTX);
+
   //Utilizando efeitos colaterais
   useEffect(() => {
-    document.title = email || "Teste";
-  }, [email]);
+    if (account) {
+      document.title = "Usuário autenticado!";
+    } else {
+      document.title = "Teste";
+    }
+  }, [account]);
 
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    try {
-      const account = service.login(email, password);
-      console.log(account);
-    } catch (error) {
-      alert((error as Error).message);
-    }
+    login(email, password);
   }
   document.title = email;
   return (
