@@ -1,17 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./styles.css";
+import { AuthService } from "../services/auth";
 
 function App() {
+  const service = new AuthService();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  //Utilizando efeitos colaterais
+  useEffect(() => {
+    document.title = email || "Teste";
+  }, [email]);
 
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    console.log("Email atual: ", email);
-    console.log("Senha atual:", password);
+    try {
+      const account = service.login(email, password);
+      console.log(account);
+    } catch (error) {
+      alert((error as Error).message);
+    }
   }
-
+  document.title = email;
   return (
     <div className="login-page">
       <div id="login-card">
